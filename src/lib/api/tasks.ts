@@ -40,9 +40,13 @@ export async function fetchTasks(
   supabase: SupabaseClient<Database>,
   projectId: string,
 ): Promise<Task[]> {
-  void supabase;
-  void projectId;
-  throw new Error('TODO 1: implement fetchTasks');
+
+  const {data, error} = await supabase
+  .from('tasks').select('*').eq('project_id', projectId).order('created_at',{ascending: true})
+  
+  if(error) throw new Error(error.message);
+  
+  return data 
 }
 
 /**
@@ -60,11 +64,24 @@ export async function createTask(
   userId: string,
   input: CreateTaskInput,
 ): Promise<Task> {
-  void supabase;
-  void projectId;
-  void userId;
-  void input;
-  throw new Error('TODO 1: implement createTask');
+  const {data,error} = await supabase.from('tasks').insert({
+    project_id: projectId,
+    created_by: userId,
+    title: input.title,
+    description: input.description || null,
+    status: input.status,
+    priority: input.priority
+  }).select().single();
+  // void supabase;
+  // void projectId;
+  // void userId;
+  // void input;
+
+  if(error) throw new Error(error.message
+    // 'TODO 1: implement createTask'
+  );
+
+  return data
 }
 
 /**
@@ -77,10 +94,15 @@ export async function updateTaskStatus(
   taskId: string,
   status: TaskStatus,
 ): Promise<Task> {
-  void supabase;
-  void taskId;
-  void status;
-  throw new Error('TODO 1: implement updateTaskStatus');
+   // void supabase;
+  // void taskId;
+  // void status;
+  const {data, error} = await supabase.from('tasks').update({status}).eq('id', taskId).select().single()
+ 
+  // throw new Error('TODO 1: implement updateTaskStatus');
+  if(error) throw new Error(error.message);
+
+  return data
 }
 
 /**
@@ -92,7 +114,11 @@ export async function deleteTask(
   supabase: SupabaseClient<Database>,
   taskId: string,
 ): Promise<void> {
-  void supabase;
-  void taskId;
-  throw new Error('TODO 1: implement deleteTask');
+  // void supabase;
+  // void taskId;
+  const {data, error} = await supabase.from('tasks').delete().eq('id',taskId)
+  // throw new Error('TODO 1: implement deleteTask');
+  if(error) throw new Error(error.message);
+
+  
 }

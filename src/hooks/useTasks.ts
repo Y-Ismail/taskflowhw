@@ -4,6 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { Task } from '@/types/database';
 
+import { fetchTasks } from '@/lib/api/tasks';
+import { taskKeys } from '@/lib/query-keys';
+import { createClient } from '@/lib/supabase/client';
+
 /* ===========================================================================
  * TODO 2 — read the tasks for one project with useQuery
  *
@@ -28,10 +32,16 @@ import type { Task } from '@/types/database';
  * =========================================================================== */
 
 export function useTasks(projectId: string) {
+
+  const supabase = createClient()
+  
   return useQuery<Task[]>({
-    queryKey: ['tasks', 'todo-2', projectId],
-    queryFn: async () => {
-      throw new Error('TODO 2: implement useTasks in src/hooks/useTasks.ts');
-    },
+    // queryKey: ['tasks', 'todo-2', projectId],
+    queryKey: taskKeys.list(projectId),
+
+    // queryFn: async () => {
+    //   throw new Error('TODO 2: implement useTasks in src/hooks/useTasks.ts');
+    // },
+    queryFn:  () => fetchTasks(supabase,projectId),
   });
 }
