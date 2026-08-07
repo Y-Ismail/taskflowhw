@@ -75,7 +75,7 @@ export function useUpdateTaskStatus(projectId: string) {
   const queryClient = useQueryClient()
   const queryKey = taskKeys.list(projectId);
   
-  return useMutation<Task, Error, { id: string; status: TaskStatus }>({
+  return useMutation({
     // mutationFn: async () => {
     //   throw new Error(`TODO 7: implement useUpdateTaskStatus (project ${projectId})`);
     // },
